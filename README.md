@@ -1,2 +1,0 @@
-# Redmapple
-My first repo
