@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flora & Co. | Premium Florist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAF9F6; 
+        }
+        .serif-font {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .carousel-container {
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+            /* Creates a 3D perspective field for children elements */
+            perspective: 1200px;
+            transform-style: preserve-3d;
+        }
+        .carousel-container::-webkit-scrollbar {
+            display: none; 
+        }
+        /* Premium custom smooth transition for 3D physics */
+        .card-3d {
+            will-change: transform, box-shadow;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+    </style>
+</head>
+<body class="text-stone-800">
+
+    <div id="toast-container" class="fixed top-24 right-6 z-[100] flex flex-col gap-3 pointer-events-none"></div>
+
+    <div id="lightbox-modal" class="hidden fixed inset-0 bg-stone-950/80 backdrop-blur-md z-[100] flex items-center justify-center p-4 cursor-zoom-out" onclick="closeLightbox()">
+        <div class="relative max-w-3xl w-full max-h-[85vh] flex flex-col justify-center items-center" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute -top-12 right-0 text-white text-4xl font-light hover:text-stone-300 focus:outline-none">&times;</button>
+            <img id="lightbox-img" src="" alt="" class="w-full h-full max-h-[75vh] object-contain rounded-lg shadow-2xl">
+            <h4 id="lightbox-title" class="serif-font text-white text-2xl mt-4 font-medium tracking-wide"></h4>
+        </div>
+    </div>
+
+    <header class="border-b border-stone-200 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="serif-font text-3xl tracking-wide font-semibold text-stone-900">Flora & Co.</h1>
+            <div class="relative">
+                <button class="flex items-center space-x-2 text-stone-600 hover:text-stone-900 transition focus:outline-none">
+                    <span class="text-sm font-medium uppercase tracking-wider">Cart</span>
+                    <span id="cart-count" class="bg-stone-900 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="max-w-6xl mx-auto px-6 pt-16 pb-12 text-center">
+        <span class="text-xs uppercase tracking-widest text-stone-500 font-medium">Handcrafted Elegance</span>
+        <h2 class="serif-font text-5xl md:text-6xl font-light text-stone-950 mt-3 max-w-2xl mx-auto leading-tight">
+            Bring life’s finest moments into full bloom.
+        </h2>
+        <p class="text-stone-500 max-w-md mx-auto mt-4 font-light text-sm md:text-base">
+            Select your curated arrangement, review your digital receipt, and finalize your order directly with us via WhatsApp.
+        </p>
+    </section>
+
+    <main class="max-w-6xl mx-auto px-6 pb-24 grid grid-cols-1 lg:grid-cols-3 gap-12">
+        
+        <div class="lg:col-span-2 overflow-hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-stone-200 pb-2 mb-6">
+                <h3 class="serif-font text-2xl text-stone-900">The Collection</h3>
+                <div class="flex items-center justify-between sm:justify-end space-x-4 mt-3 sm:mt-0 w-full sm:w-auto">
+                    <div>
+                        <select id="category-filter" onchange="filterFlowers()" class="bg-white border border-stone-300 text-stone-700 text-sm rounded-md px-3 py-1.5 focus:outline-none focus:border-stone-500 transition cursor-pointer">
+                            <option value="all">All Arrangements</option>
+                            <option value="Roses">Roses</option>
+                            <option value="Pastels">Pastels</option>
+                            <option value="Sunflowers">Sunflowers</option>
+                            <option value="Luxury Boxes">Luxury Boxes</option>
+                        </select>
+                    </div>
+                    <div id="carousel-controls" class="hidden sm:flex items-center space-x-2">
+                        <button onclick="slideGallery(-1)" class="bg-white border border-stone-300 hover:bg-stone-950 hover:text-white text-stone-700 w-8 h-8 rounded-full flex items-center justify-center transition focus:outline-none">
+                            &#8592;
+                        </button>
+                        <button onclick="slideGallery(1)" class="bg-white border border-stone-300 hover:bg-stone-950 hover:text-white text-stone-700 w-8 h-8 rounded-full flex items-center justify-center transition focus:outline-none">
+                            &#8594;
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="flower-grid" class="carousel-container flex gap-7 overflow-x-auto pb-12 pt-4 snap-x snap-mandatory -mx-6 px-6">
+            </div>
+        </div>
+
+        <div class="lg:col-span-1">
+            <div class="bg-white border border-stone-200 p-6 rounded-lg shadow-sm sticky top-24">
+                <div class="flex justify-between items-center border-b border-stone-200 pb-2 mb-4">
+                    <h3 class="serif-font text-2xl text-stone-900">Your Order Summary</h3>
+                    <button onclick="clearCart()" class="text-xs text-stone-400 hover:text-red-700 transition uppercase tracking-wider font-medium">Clear</button>
+                </div>
+                
+                <div id="cart-items" class="space-y-4 max-h-60 overflow-y-auto mb-6 pr-2">
+                    <p class="text-stone-400 text-sm font-light italic">Your cart is currently empty.</p>
+                </div>
+
+                <div class="border-t border-stone-100 pt-4 space-y-2 text-sm font-light text-stone-600">
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Delivery</span>
+                        <span class="text-emerald-700 font-medium">Free</span>
+                    </div>
+                    <div class="flex justify-between text-base font-semibold text-stone-900 pt-2 border-t border-stone-200">
+                        <span>Total Balance</span>
+                        <span id="total">$0.00</span>
+                    </div>
+                </div>
+
+                <form id="order-form" onsubmit="sendWhatsAppOrder(event)" class="mt-6 space-y-4">
+                    <h4 class="text-xs uppercase tracking-wider text-stone-500 font-semibold mb-2">Delivery Details</h4>
+                    <div>
+                        <label class="block text-xs text-stone-600 uppercase mb-1">Full Name</label>
+                        <input type="text" id="cust-name" required class="w-full bg-stone-50 border border-stone-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-stone-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-stone-600 uppercase mb-1">Delivery Address</label>
+                        <textarea id="cust-address" rows="2" required class="w-full bg-stone-50 border border-stone-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-stone-500 transition"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-stone-600 uppercase mb-1">Custom Note (Optional)</label>
+                        <input type="text" id="cust-note" placeholder="e.g., Happy Birthday!" class="w-full bg-stone-50 border border-stone-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-stone-500 transition">
+                    </div>
+
+                    <button type="submit" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium text-sm tracking-wide uppercase py-3.5 rounded transition shadow-sm mt-2">
+                        Book via WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-8 text-center text-xs font-light tracking-wider">
+        <p>&copy; 2026 Flora & Co. Bespoke Floristry. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const WHATSAPP_NUMBER = "1234567890"; 
+        const CURRENCY_SYMBOL = "$";
+
+        const flowers = [
+            {
+                id: 1,
+                name: "The White Noir",
+                price: 85.00,
+                category: "Roses",
+                description: "Stunning white roses paired with fresh luxury eucalyptus.",
+                image: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 2,
+                name: "Blush Meadow Bouquet",
+                price: 95.00,
+                category: "Pastels",
+                description: "Soft pink peonies mixed with seasonal wild pastels.",
+                image: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 3,
+                name: "Soleil Sunflower Ritual",
+                price: 70.00,
+                category: "Sunflowers",
+                description: "Vibrant golden sunflowers wrapped in organic premium rustic burlap.",
+                image: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 4,
+                name: "Crimson Velvet Box",
+                price: 120.00,
+                category: "Luxury Boxes",
+                description: "Deep red premium roses arranged perfectly in a luxury velvet box.",
+                image: "https://images.unsplash.com/photo-1533616688419-b7a585564566?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 5,
+                name: "Bluebird Elegance",
+                price: 125.00,
+                category: "Luxury Boxes",
+                description: "Exquisite blue hybrid seasonal blooms custom boxed for selective tastes.",
+                image: "https://images.unsplash.com/photo-1527061011665-3652c757a4d4?auto=format&fit=crop&w=600&q=80"
+             }
+        ];
+
+        let cart = {};
+
+        function initStore(filterCategory = "all") {
+            const grid = document.getElementById('flower-grid');
+            const controls = document.getElementById('carousel-controls');
+            
+            if (!grid) return;
+
+            const filteredFlowers = filterCategory === "all" 
+                ? flowers 
+                : flowers.filter(flower => flower.category === filterCategory);
+
+            if (filteredFlowers.length === 0) {
+                grid.innerHTML = `
+                    <div class="w-full text-center py-12 px-6">
+                        <p class="text-stone-400 text-sm font-light italic">No luxury arrangements found in this category.</p>
+                    </div>`;
+                if(controls) controls.style.display = 'none';
+                return;
+            }
+
+            if(controls) controls.style.display = filteredFlowers.length > 2 ? 'flex' : 'none';
+
+            // Integrated template strings injecting high-performance 3D styles
+            grid.innerHTML = filteredFlowers.map(flower => `
+                <div class="w-[82vw] sm:w-80 bg-white border border-stone-100 rounded-xl overflow-hidden card-3d shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.12)] hover:-translate-y-4 hover:scale-[1.02] hover:rotate-1 snap-center sm:snap-start flex-shrink-0 flex flex-col">
+                    <div class="w-full aspect-[4/5] overflow-hidden relative cursor-zoom-in" onclick="openLightbox('${flower.image}', '${flower.name}')">
+                        <img src="${flower.image}" alt="${flower.name}" class="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-stone-950/0 hover:bg-stone-950/25 transition duration-300 flex items-center justify-center opacity-0 hover:opacity-100 group">
+                            <span class="bg-white text-stone-900 text-xs font-medium uppercase tracking-wider px-4 py-2 rounded shadow-lg transform translate-y-4 group-hover:translate-y-0 transition duration-300">View Close-up</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between bg-white">
+                        <div>
+                            <div class="flex justify-between items-baseline mb-1 gap-2">
+                                <h4 class="serif-font text-xl font-medium text-stone-900 leading-tight">${flower.name}</h4>
+                                <span class="text-stone-900 font-semibold whitespace-nowrap">${CURRENCY_SYMBOL}${flower.price.toFixed(2)}</span>
+                            </div>
+                            <span class="inline-block text-[10px] uppercase tracking-wider bg-stone-100 text-stone-600 px-2.5 py-1 rounded mb-4 font-medium">${flower.category}</span>
+                            <p class="text-stone-500 text-xs font-light mb-5 line-clamp-2 leading-relaxed">${flower.description}</p>
+                        </div>
+                        <button onclick="addToCart(${flower.id})" class="w-full bg-stone-900 border border-stone-950 text-white hover:bg-stone-800 text-xs font-medium uppercase tracking-wider py-3 rounded-lg transition active:scale-[0.98]">
+                            Add to Arrangement
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            grid.scrollLeft = 0;
+        }
+
+        function slideGallery(direction) {
+            const container = document.getElementById('flower-grid');
+            const cardWidth = container.querySelector('.card-3d')?.offsetWidth || 320;
+            container.scrollLeft += direction * (cardWidth + 28); 
+        }
+
+        function filterFlowers() {
+            const selectedCategory = document.getElementById('category-filter').value;
+            initStore(selectedCategory);
+        }
+
+        function addToCart(id) {
+            const flower = flowers.find(f => f.id === id);
+            if (!flower) return;
+
+            if (cart[id]) {
+                cart[id]++;
+            } else {
+                cart[id] = 1;
+            }
+            
+            showToast(`✨ ${flower.name} added to arrangement`);
+            updateCartUI();
+        }
+
+        function changeQuantity(id, delta) {
+            if (!cart[id]) return;
+            cart[id] += delta;
+            if (cart[id] <= 0) {
+                delete cart[id];
+            }
+            updateCartUI();
+        }
+
+        function clearCart() {
+            cart = {};
+            updateCartUI();
+            showToast("🧹 Cart cleared successfully");
+        }
+
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            let subtotal = 0;
+            let totalItems = 0;
+            let htmlContent = '';
+
+            localStorage.setItem('flora_cart', JSON.stringify(cart));
+
+            Object.keys(cart).forEach(id => {
+                const flower = flowers.find(f => f.id == id);
+                if (flower) {
+                    const count = cart[id];
+                    const itemCost = flower.price * count;
+                    subtotal += itemCost;
+                    totalItems += count;
+
+                    htmlContent += `
+                        <div class="flex items-center justify-between text-sm bg-stone-50 p-2.5 rounded border border-stone-100">
+                            <div>
+                                <h5 class="font-medium text-stone-900">${flower.name}</h5>
+                                <span class="text-xs text-stone-500">${CURRENCY_SYMBOL}${flower.price.toFixed(2)} each</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div class="flex items-center border border-stone-300 rounded bg-white overflow-hidden">
+                                    <button onclick="changeQuantity(${id}, -1)" class="px-2 py-0.5 hover:bg-stone-100 text-stone-600">-</button>
+                                    <span class="px-2 text-xs font-medium text-stone-800">${count}</span>
+                                    <button onclick="changeQuantity(${id}, 1)" class="px-2 py-0.5 hover:bg-stone-100 text-stone-600">+</button>
+                                </div>
+                                <span class="font-medium text-stone-900 text-xs">${CURRENCY_SYMBOL}${itemCost.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            if(document.getElementById('cart-count')) document.getElementById('cart-count').innerText = totalItems;
+            if(document.getElementById('subtotal')) document.getElementById('subtotal').innerText = CURRENCY_SYMBOL + subtotal.toFixed(2);
+            if(document.getElementById('total')) document.getElementById('total').innerText = CURRENCY_SYMBOL + subtotal.toFixed(2);
+
+            if (!cartItemsContainer) return;
+            if (htmlContent === '') {
+                cartItemsContainer.innerHTML = `<p class="text-stone-400 text-sm font-light italic">Your cart is currently empty.</p>`;
+            } else {
+                cartItemsContainer.innerHTML = htmlContent;
+            }
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            
+            toast.className = "bg-stone-900 text-white text-xs uppercase tracking-wider px-4 py-3 rounded shadow-lg transition-all duration-300 transform translate-y-2 opacity-0 font-medium pointer-events-auto";
+            toast.innerText = message;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        function openLightbox(imgSrc, name) {
+            document.getElementById('lightbox-img').src = imgSrc;
+            document.getElementById('lightbox-title').innerText = name;
+            document.getElementById('lightbox-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; 
+            
+            history.pushState({ lightboxOpen: true }, "");
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            if (!modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = ''; 
+                
+                if (history.state && history.state.lightboxOpen) {
+                    history.back();
+                }
+            }
+        }
+
+        window.addEventListener('popstate', function(event) {
+            document.getElementById('lightbox-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+
+        function sendWhatsAppOrder(event) {
+            event.preventDefault();
+            if (Object.keys(cart).length === 0) {
+                alert("Please add at least one luxury arrangement to your cart before checking out.");
+                return;
+            }
+
+            const name = document.getElementById('cust-name').value;
+            const address = document.getElementById('cust-address').value;
+            const note = document.getElementById('cust-note').value || "None";
+
+            let message = `💐 *NEW FLOWER BOOKING - FLORA & CO.*\n\n`;
+            message += `*Customer Details:*\n👤 Name: ${name}\n📍 Address: ${address}\n📝 Note: ${note}\n\n*Order Receipt:*\n`;
+
+            let subtotal = 0;
+            Object.keys(cart).forEach(id => {
+                const flower = flowers.find(f => f.id == id);
+                if (flower) {
+                    const count = cart[id];
+                    const itemCost = flower.price * count;
+                    subtotal += itemCost;
+                    message += `▪️ ${flower.name} x${count} — ${CURRENCY_SYMBOL}${itemCost.toFixed(2)}\n`;
+                }
+            });
+
+            message += `\n💰 *Total Balance: ${CURRENCY_SYMBOL}${subtotal.toFixed(2)}*`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
+        }
+
+        window.onload = function() {
+            initStore();
+            const savedCart = localStorage.getItem('flora_cart');
+            if (savedCart) {
+                try {
+                    cart = JSON.parse(savedCart);
+                    updateCartUI();
+                } catch(e) {
+                    cart = {};
+                }
+            }
+        };
+    </script>
+</body>
+</html>
