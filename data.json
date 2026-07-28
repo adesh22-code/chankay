@@ -28,5 +28,32 @@
   { "id": 27, "name": "Queen of Heart", "category": "Premium X", "subcategory": "Sapling", "price": 1200, "desc": "Queen of Heart is a magnificent standard Cymbidium renowned for its vibrant deep rose-pink blooms and exceptional floral display. The large, perfectly shaped flowers are gracefully arranged on strong, upright spikes, creating a bold and elegant presentation. Each bloom features rich magenta-pink petals beautifully complemented by a deep burgundy lip with a white center and golden-yellow throat, adding remarkable depth and contrast.", "image": "img/20.jpg" },
   { "id": 28, "name": "Yai", "category": "Premium", "subcategory": "Mature", "price": 2500, "desc": "Cymbidium 'Yai' is a graceful standard variety admired for its elegant white to blush-pink blooms, beautifully contrasted by a rich deep burgundy lip. The flowers are evenly arranged on tall, upright spikes, creating a refined and sophisticated display. Its pristine petals, long-lasting blooms, and excellent flower count make it a standout selection for exhibitions, premium collections, and ornamental landscaping. With its striking contrast and classic beauty, 'Yai' is a highly desirable Cymbidium that brings elegance and charm to any orchid collection.", "image": "img/21.jpg" },
   { "id": 29, "name": "Wyong Flame 'Dural'", "category": "Premium X", "subcategory": "Mature", "price": 3500, "desc": "Cymbidium 'Wyong Flame 'Dural'' is a spectacular standard variety admired for its large, broad-petaled soft pink blooms. The flowers are carried on tall, strong spikes, creating a graceful and impressive display. Mature plants produce excellent flower spikes with outstanding bloom count, making this variety ideal for exhibitions, premium collections, and commercial cut flower production. Renowned for its vigorous growth, exceptional flower size, and long-lasting blooms, 'Wyong Flame 'Dural'' is a highly prized Cymbidium that brings elegance, beauty, and sophistication to any orchid collection.", "image": "img/22.jpg" },
-  { "id": 30, "name": "Show girl 'Lily Langtry'", "category": "Medium", "subcategory": "Mature", "price": 1000, "desc": "The Cymbidium Showgirl orchid brings a touch of classic grace and gentle beauty into your home. Known for its soft, porcelain-like presence, this beloved miniature variety balances a delicate aesthetic with a resilient spirit. It is the perfect choice for anyone looking to bring a calm, sophisticated natural accent to their living space.", "image": "img/23.jpg" }
+  { "id": 30, "name": "Show girl 'Lily Langtry'", "category": "Medium", "subcategory": "Mature", "price": 1000, "desc": "The Cymbidium Showgirl orchid brings a touch of classic grace and gentle beauty into your home. Known for its soft, porcelain-like presence, this beloved miniature variety balances a delicate aesthetic with a resilient spirit. It is the perfect choice for anyone looking to bring a calm, sophisticated natural accent to their living space.", "image": "img/23.jpg" },
+  {
+  "id": 31,
+  "name": "New variety.",
+  "category": "Premium X",
+  "subcategory": "Saplings",
+  "price": 450,
+  "desc": "(Small)This are the New Variety of Orchid hereby, also this are the unidentified.",
+  "image": "img/24.jpg"
+},
+{
+  "id": 32,
+  "name": "New variety.",
+  "category": "Premium X",
+  "subcategory": "Saplings",
+  "price": 700,
+  "desc": "(Medium)This are the New Variety of Orchid hereby, also this are the unidentified.",
+  "image": "img/24.jpg"
+},
+{
+  "id": 33,
+  "name": "New variety.",
+  "category": "Premium X",
+  "subcategory": "Saplings",
+  "price": 1000,
+  "desc": "(Large)This are the New Variety of Orchid hereby, also this are the unidentified.",
+  "image": "img/24.jpg"
+}
 ]
