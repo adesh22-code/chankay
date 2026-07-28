@@ -33,7 +33,7 @@
   "id": 31,
   "name": "New variety.",
   "category": "Premium X",
-  "subcategory": "Saplings",
+  "subcategory": "Sapling",
   "price": 450,
   "desc": "(Small)This are the New Variety of Orchid hereby, also this are the unidentified.",
   "image": "img/24.jpg"
@@ -42,7 +42,7 @@
   "id": 32,
   "name": "New variety.",
   "category": "Premium X",
-  "subcategory": "Saplings",
+  "subcategory": "Sapling",
   "price": 700,
   "desc": "(Medium)This are the New Variety of Orchid hereby, also this are the unidentified.",
   "image": "img/24.jpg"
@@ -51,7 +51,7 @@
   "id": 33,
   "name": "New variety.",
   "category": "Premium X",
-  "subcategory": "Saplings",
+  "subcategory": "Sapling",
   "price": 1000,
   "desc": "(Large)This are the New Variety of Orchid hereby, also this are the unidentified.",
   "image": "img/24.jpg"
